@@ -20,12 +20,6 @@ jobs:
     - name: Build Next.js Site
       run: npm run build && npm run export
 
-    - name: Deploy to GitHub Pages
-      uses: actions/deploy-pages@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        enablement: false  # Ensure this is set correctly based on your needs
-
 permissions:
   contents: read
   pages: write
