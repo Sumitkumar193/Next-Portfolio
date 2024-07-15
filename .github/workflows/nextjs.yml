@@ -24,7 +24,7 @@ jobs:
       uses: actions/deploy-pages@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        enablement: true  # Ensure this is set correctly based on your needs
+        enablement: false  # Ensure this is set correctly based on your needs
 
 permissions:
   contents: read
