@@ -18,7 +18,7 @@ jobs:
       run: npm run lint
 
     - name: Build Next.js Site
-      run: npm run build && npm run export
+      run: npm run build
 
 permissions:
   contents: read
