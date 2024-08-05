@@ -8,9 +8,6 @@ import NavItems from "@/components/ui/NavItems";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const HeaderNavbar = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const toggleSheet = () => setIsOpen(!isOpen);
-
 	return (
 		<header className="flex items-center justify-between px-4 py-3 bg-background border-b border-border">
 			<div className="flex items-center space-x-4">
@@ -37,20 +34,18 @@ const HeaderNavbar = () => {
 					Sign In
 				</Button>
 				<ThemeToggle />
-				<Sheet open={isOpen}>
+				<Sheet>
 					<SheetTrigger asChild>
 						<Button
 							variant="ghost"
 							size="icon"
 							className="md:hidden"
-							onClick={toggleSheet}
 						>
 							<Menu className="h-6 w-6" />
 							<span className="sr-only">Toggle menu</span>
 						</Button>
 					</SheetTrigger>
 					<SheetContent
-						onClick={() => setIsOpen((prev) => !prev)}
 						side="right"
 						className="w-[300px] sm:w-[400px] bg-background"
 					>

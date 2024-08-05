@@ -1,14 +1,21 @@
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
+import { useRecoilState } from "recoil";
 import { Button } from "./button";
 import { Sun, Moon } from "lucide-react";
+import themeState from "@/states/ThemeState";
 
 export default function ThemeToggle() {
-	const { theme, setTheme, systemTheme } = useTheme();
+	const [theme, setTheme] = useRecoilState(themeState);
+	const themeHook = useTheme();
 
 	useEffect(() => {
-		setTheme(systemTheme === "light" ? "dark" : "light");
-	}, [systemTheme, setTheme]);
+		themeHook.setTheme(themeHook.systemTheme ?? "light")
+	}, [themeHook.systemTheme, themeHook.setTheme]);
+
+	useEffect(() => {
+		themeHook.setTheme(theme);
+	}, [theme, themeHook]);
 
 	return (
 		<Button
