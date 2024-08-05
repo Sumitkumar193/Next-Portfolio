@@ -11,7 +11,7 @@ export default function ThemeToggle() {
 
 	useEffect(() => {
 		themeHook.setTheme(themeHook.systemTheme ?? "light")
-	}, [themeHook.systemTheme, themeHook.setTheme]);
+	}, [themeHook]);
 
 	useEffect(() => {
 		themeHook.setTheme(theme);

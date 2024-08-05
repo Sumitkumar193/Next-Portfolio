@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import NavItems from "@/components/ui/NavItems";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const HeaderNavbar = () => {
+	const router = useRouter();
 	return (
 		<header className="flex items-center justify-between px-4 py-3 bg-background border-b border-border">
 			<div className="flex items-center space-x-4">
@@ -49,9 +50,12 @@ const HeaderNavbar = () => {
 						side="right"
 						className="w-[300px] sm:w-[400px] bg-background"
 					>
+						<SheetHeader>
+							<SheetTitle>{ " " }</SheetTitle>
+						</SheetHeader>
 						<nav className="flex flex-col space-y-4 mt-4">
 							<NavItems />
-							<Button variant="outline" className="w-full">
+							<Button onClick={() => router.push('/login')} variant="outline" className="w-full">
 								Sign In
 							</Button>
 						</nav>
