@@ -30,6 +30,7 @@ const HeaderNavbar = () => {
 				</div>
 				<Button
 					variant="ghost"
+					onClick={() => router.push('/login')}
 					className="hidden md:inline-flex text-muted-foreground hover:text-foreground"
 				>
 					Sign In

@@ -1,27 +1,34 @@
 "use client";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider } from "next-themes";
 import { RecoilRoot } from "recoil";
 import HeaderNavbar from "@/components/HeaderNavbar";
+import { Toaster } from "@/components/ui/toaster";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <RecoilRoot>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
-            <HeaderNavbar />
-            {children}
-          </ThemeProvider>
-        </RecoilRoot>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body className={inter.className}>
+				<RecoilRoot>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem={true}
+					>
+						<Toaster />
+						<HeaderNavbar />
+						{children}
+					</ThemeProvider>
+				</RecoilRoot>
+			</body>
+		</html>
+	);
 }
