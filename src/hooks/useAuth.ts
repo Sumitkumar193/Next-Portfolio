@@ -9,6 +9,7 @@ export type RegisterData = {
     name: string;
     email: string;
     password: string;
+    confirmPassword: string;
 };
 
 export default function useAuth() {
@@ -20,7 +21,7 @@ export default function useAuth() {
         });
     }
 
-    async function register(data: RegisterData) {
+    async function signup(data: RegisterData): Promise<RegisterData> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(data);
@@ -33,6 +34,6 @@ export default function useAuth() {
 
     return {
         login,
-        register,
+        signup,
     };
 }
