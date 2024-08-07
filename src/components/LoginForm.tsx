@@ -1,6 +1,8 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import useAuth, { LoginData } from "@/hooks/useAuth";
 import { LoginValidation } from "@/validations/LoginValidations";
 import { FloatingLabelInput } from "./ui/InputLabel";
@@ -8,6 +10,7 @@ import { Button } from "./ui/button";
 
 export default function LoginForm() {
 	const { login } = useAuth();
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -17,12 +20,19 @@ export default function LoginForm() {
 	});
 
 	async function onSubmit(data: LoginData): Promise<void> {
-		console.log("data", data);
-		await login(data);
+		toast.promise(login(data), {
+            loading: "Logging in...",
+            success: (data: LoginData) => {
+				router.push('/');
+                return `Welcome back, ${data.email}`;
+            },
+            error: () => "Invalid email or password",
+        });
 	}
 
 	return (
 		<form
+			method="post"
 			className="flex flex-col items-center justify-center gap-2"
 			onSubmit={handleSubmit(onSubmit)}
 		>

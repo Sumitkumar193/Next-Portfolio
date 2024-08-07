@@ -1,4 +1,4 @@
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 export type LoginData = {
     email: string;
@@ -12,17 +12,11 @@ export type RegisterData = {
 };
 
 export default function useAuth() {
-    const { toast } = useToast();
 
-    async function login(data: LoginData) {
+    async function login(data: LoginData) : Promise<LoginData> {
         return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(data);
-                toast({
-                    title: "Login Success",
-                    description: "Welcome back!",
-                })
-            }, 2000);
+            const resolveAfterDelay = () => resolve(data);
+            setTimeout(resolveAfterDelay, 2000);
         });
     }
 
@@ -30,8 +24,7 @@ export default function useAuth() {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(data);
-                toast({
-                    title: "Register Success",
+                toast.success("Register Success", {
                     description: "Welcome to the family!",
                 });
             }, 3000);

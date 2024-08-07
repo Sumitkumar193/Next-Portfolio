@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { RecoilRoot } from "recoil";
 import HeaderNavbar from "@/components/HeaderNavbar";
-import { Toaster } from "@/components/ui/toaster";
-
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +22,7 @@ export default function RootLayout({
 						defaultTheme="system"
 						enableSystem={true}
 					>
-						<Toaster />
+						<Toaster richColors position="top-right" closeButton />
 						<HeaderNavbar />
 						{children}
 					</ThemeProvider>
