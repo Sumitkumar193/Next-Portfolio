@@ -36,10 +36,11 @@ const FloatingLabelInput = React.forwardRef<
   React.ElementRef<typeof FloatingInput>,
   React.PropsWithoutRef<FloatingLabelInputProps>
 >(({ id, label, ...props }, ref) => {
+  const uid = id ?? crypto.randomUUID();
   return (
     <div className="relative">
-      <FloatingInput ref={ref} id={id} {...props} />
-      <FloatingLabel htmlFor={id}>{label}</FloatingLabel>
+      <FloatingInput ref={ref} id={uid} {...props} />
+      <FloatingLabel htmlFor={uid}>{label}</FloatingLabel>
     </div>
   );
 });
