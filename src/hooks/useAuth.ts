@@ -1,4 +1,5 @@
-import { toast } from "sonner";
+import { useSetRecoilState } from "recoil";
+import ProfileState from "@/states/LoginState";
 
 export type LoginData = {
     email: string;
@@ -13,27 +14,64 @@ export type RegisterData = {
 };
 
 export default function useAuth() {
+    const setProfile = useSetRecoilState(ProfileState);
 
     async function login(data: LoginData) : Promise<LoginData> {
-        return new Promise((resolve) => {
-            const resolveAfterDelay = () => resolve(data);
-            setTimeout(resolveAfterDelay, 2000);
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
         });
+
+        if (!response.ok) {
+            throw new Error("Invalid email or password");
+        }
+
+        const json = await response.json();
+        setProfile(json.data);
+
+        return data;
     }
 
     async function signup(data: RegisterData): Promise<RegisterData> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(data);
-                toast.success("Register Success", {
-                    description: "Welcome to the family!",
-                });
-            }, 3000);
+        const response = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error("Invalid email or password");
+        }
+
+        const json = await response.json();
+        setProfile(json.data);
+
+        return data;
+    }
+
+    async function logout() {
+        const response = await fetch("/api/auth/logout", {
+            method: "POST",
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to logout");
+        }
+
+        setProfile({
+            name: null,
+            email: null,
         });
     }
 
     return {
         login,
         signup,
+        logout
     };
 }
