@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,8 @@ import { isLoggedInSelector } from "@/states/LoginState";
 const HeaderNavbar = () => {
 	const router = useRouter();
 	const { logout } = useAuth();
-	const isLoggedIn = useRecoilValue(isLoggedInSelector);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const isLoggedInCheck = useRecoilValue(isLoggedInSelector);
 	const setIsMobile = useSetRecoilState(mobileState);
 
 	useLayoutEffect(() => {
@@ -33,6 +34,10 @@ const HeaderNavbar = () => {
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, [setIsMobile]);
+
+	useEffect(() => {
+		setIsLoggedIn(isLoggedInCheck);
+	}, [isLoggedInCheck]);
 
 	return (
 		<header className="flex items-center justify-between px-4 py-3 bg-background border-b border-border">
