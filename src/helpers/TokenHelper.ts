@@ -1,20 +1,30 @@
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 import prisma from '@/db/client';
 
+const secretKey = new TextEncoder().encode(process.env.JWT_SECRET_KEY as string);
+
+type TokenPayload = {
+    userId: string;
+    tokenId: string;
+    iat: number;
+    exp: number;
+}
+
+type TokenHeader = {
+    alg: string;
+}
 export default class TokenHelper {
     static async generateToken(UserID: string) {
         const tokenId = crypto.randomUUID();
 
-        const token = jwt.sign(
-            {
-                userId: UserID,
-                tokenId,
-            },
-            process.env.JWT_SECRET as string,
-            {
-                expiresIn: '1d'
-            }
-        );
+        const token = await new SignJWT({
+            userId: UserID,
+            tokenId,
+        })
+            .setProtectedHeader({ alg: 'HS256' })
+            .setIssuedAt()
+            .setExpirationTime('1d')
+            .sign(secretKey);
 
         await prisma.userToken.create({
             data: {
@@ -27,19 +37,56 @@ export default class TokenHelper {
         return token;
     }
 
-    static async revokeToken(TokenID: string) {
-        await prisma.userToken.updateMany({
-            where: {
-                tokenId: TokenID
-            },
-            data: {
-                revoked: true
-            }
-        });
-        return true;
+    static async verifyToken(token: string): Promise<boolean> {
+        try {
+            const { payload } = await jwtVerify(token, secretKey, {
+                algorithms: ['HS256'],
+            });
+
+            return !!payload;
+        } catch (error) {
+            return false;
+        }
     }
 
-    static getTokenFromHeader(cookies: string | null) {
+    static decodeToken(token: string): { header: TokenHeader; payload: TokenPayload } {
+        try {
+            const [header, payload] = token.split('.').slice(0, 2);
+            const decodedHeader = JSON.parse(atob(header));
+            const decodedPayload = JSON.parse(atob(payload));
+            return { header: decodedHeader, payload: decodedPayload };
+        } catch (error) {
+            console.error('Token decoding failed:', error);
+            return {
+                header: { alg: '' },
+                payload: {
+                    userId: '',
+                    tokenId: '',
+                    iat: 0,
+                    exp: 0,
+                }
+            };
+        }
+    }
+
+    static async revokeToken(TokenID: string): Promise<boolean> {
+        try {
+            await prisma.userToken.updateMany({
+                where: {    
+                    tokenId: TokenID
+                },
+                data: {
+                    revoked: true
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error('Token revocation failed:', error);
+            return false;
+        }
+    }
+
+    static getTokenFromHeader(cookies: string) {
         const cookieList = cookies?.split(';').reduce((acc, cookie) => {
             const [key, value] = cookie.split('=');
             acc[key.trim()] = value;
@@ -51,5 +98,5 @@ export default class TokenHelper {
         }
         const token = cookieList.accessToken;
         return token;
-    }        
+    }
 }

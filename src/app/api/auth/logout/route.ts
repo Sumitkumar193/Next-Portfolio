@@ -5,13 +5,19 @@ import ApiError from "@/errors/ApiError";
 export async function POST(request: Request) {
     try {
         const cookies = request.headers.get('cookie');
+        if (!cookies) {
+            throw new ApiError('Unauthorized', 401);
+        }
+
         const token = TokenHelper.getTokenFromHeader(cookies);
 
         if (!token) {
             throw new ApiError('Unauthorized', 401);
         }
 
-        await TokenHelper.revokeToken(token);
+        const { payload } = TokenHelper.decodeToken(token);
+
+        await TokenHelper.revokeToken(payload.tokenId);
 
         const response = NextResponse.json({
             success: true,
