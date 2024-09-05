@@ -1,22 +1,24 @@
 import { atom, selector } from "recoil";
-import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist();
+const getProfileFromCookies = () => {
+    if (typeof window === "undefined") return null;
+    const cookies = document.cookie.split("; ");
+    const profileCookie = cookies.find((cookie) => cookie.startsWith("profile="));
+    if (!profileCookie) return null;
+    const profile = JSON.parse(atob(profileCookie.split("=")[1]));
+    return profile;
+};
 
 const ProfileState = atom({
     key: "ProfileState",
-    default: {
-        name: null,
-        email: null,
-    },
-    effects_UNSTABLE: [persistAtom],
+    default: getProfileFromCookies(),
 });
 
 export const isLoggedInSelector = selector({
     key: "isLoggedInSelector",
     get: ({ get }) => {
         const profile = get(ProfileState);
-        return profile.email !== null;
+        return !!profile?.email;
     },
 });
 

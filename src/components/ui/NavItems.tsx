@@ -13,6 +13,14 @@ export default function NavItems() {
 			</li>
 			<li>
 				<Link
+					href="/social"
+					className="text-muted-foreground hover:text-foreground transition-colors"
+				>
+					Social
+				</Link>
+			</li>
+			<li>
+				<Link
 					href="/about"
 					className="text-muted-foreground hover:text-foreground transition-colors"
 				>

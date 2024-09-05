@@ -31,6 +31,12 @@ export async function POST(request: Request) {
             secure: process.env.NODE_ENV === 'production',
         });
 
+        response.cookies.set('profile', '', {
+            maxAge: 0,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production',
+        });
+
         return response;
     } catch (error) {
         console.error(error);

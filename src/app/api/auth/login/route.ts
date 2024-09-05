@@ -47,6 +47,15 @@ export async function POST(request: Request) {
             secure: process.env.NODE_ENV === 'production',
         });
 
+        response.cookies.set('profile', btoa(JSON.stringify({
+            name: user.name,
+            email: user.email,
+        })), {
+            maxAge: 60 * 60 * 24,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production',
+        });
+
         return response;
     } catch (error) {
         const typedError = error as { status?: number; message?: string };

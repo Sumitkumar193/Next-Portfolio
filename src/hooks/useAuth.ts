@@ -1,5 +1,6 @@
 import { useSetRecoilState } from "recoil";
 import ProfileState from "@/states/LoginState";
+import { useRouter } from "next/navigation";
 
 export type LoginData = {
     email: string;
@@ -15,6 +16,7 @@ export type RegisterData = {
 
 export default function useAuth() {
     const setProfile = useSetRecoilState(ProfileState);
+    const router = useRouter();
 
     async function login(data: LoginData) : Promise<LoginData> {
         const response = await fetch("/api/auth/login", {
@@ -31,7 +33,7 @@ export default function useAuth() {
 
         const json = await response.json();
         setProfile(json.data);
-
+        router.push("/");
         return data;
     }
 
@@ -50,7 +52,7 @@ export default function useAuth() {
 
         const json = await response.json();
         setProfile(json.data);
-
+        router.push("/");
         return data;
     }
 
@@ -67,6 +69,9 @@ export default function useAuth() {
             name: null,
             email: null,
         });
+        router.push("/");
+        const data = await response.json();
+        return data;
     }
 
     return {
