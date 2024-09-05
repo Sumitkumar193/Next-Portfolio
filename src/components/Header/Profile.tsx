@@ -4,13 +4,11 @@ import Image from "next/image";
 import { Sun, Moon } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import useSetTheme from "@/hooks/useSetTheme";
-import ProfileState from "@/states/LoginState";
-import { useRecoilValue } from "recoil";
+import { ProfileType } from "@/states/LoginState";
 
-export default function Profile() {
+export default function Profile({ profile }: { profile: ProfileType | null }) {
     const { logout } = useAuth();
     const { toggleTheme } = useSetTheme();
-    const profile = useRecoilValue(ProfileState);
     const [popup, setPopup] = useState(false);
 
     return (

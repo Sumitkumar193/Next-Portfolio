@@ -1,19 +1,19 @@
 import { atom, selector } from "recoil";
 
-type Profile = {
+export type ProfileType = {
     id?: string;
     name: string;
     email: string;
     avatar?: string;
 };
 
-function getProfileFromCookies(): Profile | null {
+function getProfileFromCookies(): ProfileType | null {
     try {
         if (typeof window === "undefined") throw new Error("No window object");
         const cookies = document.cookie.split("; ");
         const profileCookie = cookies.find((cookie) => cookie.startsWith("profile="));
         if (!profileCookie) throw new Error("No profile cookie");
-        const profile: Profile = JSON.parse(atob(profileCookie.split("=")[1]));
+        const profile: ProfileType = JSON.parse(atob(profileCookie.split("=")[1]));
         return profile;
     } catch (error) {
         console.error(error);
