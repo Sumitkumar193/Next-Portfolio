@@ -4,6 +4,7 @@ type Profile = {
     id?: string;
     name: string;
     email: string;
+    avatar?: string;
 };
 
 function getProfileFromCookies(): Profile | null {

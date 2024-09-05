@@ -65,11 +65,8 @@ export default function useAuth() {
             throw new Error("Failed to logout");
         }
 
-        setProfile({
-            name: null,
-            email: null,
-        });
-        router.push("/");
+        setProfile(null);
+        router.push("/login");
         const data = await response.json();
         return data;
     }

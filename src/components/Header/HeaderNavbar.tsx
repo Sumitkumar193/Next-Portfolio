@@ -17,6 +17,7 @@ import mobileState from "@/states/MobileState";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useAuth from "@/hooks/useAuth";
 import { isLoggedInSelector } from "@/states/LoginState";
+import Profile from "./Profile";
 
 const HeaderNavbar = () => {
 	const router = useRouter();
@@ -40,7 +41,7 @@ const HeaderNavbar = () => {
 	}, [isLoggedInCheck]);
 
 	return (
-		<header className="flex items-center justify-between px-4 py-3 bg-background border-b border-border">
+		<header className="flex items-center sm:justify-between md:justify-around px-4 py-3 bg-background border-b border-border">
 			<div className="flex items-center space-x-4">
 				<h1 className="text-xl font-bold text-foreground">My App</h1>
 				<nav className="hidden md:block">
@@ -51,7 +52,7 @@ const HeaderNavbar = () => {
 			</div>
 			<div className="flex items-center space-x-2">
 				<div className="hidden md:flex items-center space-x-2 bg-muted rounded-md px-2">
-					<Search className="h-4 w-4 text-muted-foreground" />
+					<Search className="h-4 w-3 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-muted-foreground" />
 					<Input
 						type="search"
 						placeholder="Search..."
@@ -59,13 +60,9 @@ const HeaderNavbar = () => {
 					/>
 				</div>
 				{isLoggedIn ? (
-					<Button
-						onClick={logout}
-						variant="outline"
-						className="hidden md:inline-flex text-muted-foreground hover:text-foreground"
-					>
-						Logout
-					</Button>
+					<div className="hidden md:flex">
+						<Profile />
+					</div>
 				) : (
 					<Button
 						onClick={() => router.push("/login")}
@@ -75,7 +72,9 @@ const HeaderNavbar = () => {
 						Sign In
 					</Button>
 				)}
-				<ThemeToggle />
+				<div className="md:hidden">
+					<ThemeToggle />
+				</div>
 				<Sheet>
 					<SheetTrigger asChild>
 						<Button
@@ -92,18 +91,14 @@ const HeaderNavbar = () => {
 						className="w-[300px] sm:w-[400px] bg-background"
 					>
 						<SheetHeader>
-							<SheetTitle> </SheetTitle>
+							<SheetTitle />
 						</SheetHeader>
 						<nav className="flex flex-col space-y-4 mt-4">
 							<NavItems />
 							{isLoggedIn ? (
-								<Button
-									onClick={logout}
-									variant="outline"
-									className="w-full"
-								>
-									Logout
-								</Button>
+								<div className="fixed bottom-4 m-2">
+									<Profile />
+								</div>
 							) : (
 								<Button
 									onClick={() => router.push("/login")}

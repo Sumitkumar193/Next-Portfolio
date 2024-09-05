@@ -2,7 +2,7 @@
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { RecoilRoot } from "recoil";
-import HeaderNavbar from "@/components/HeaderNavbar";
+import HeaderNavbar from "@/components/Header/HeaderNavbar";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
