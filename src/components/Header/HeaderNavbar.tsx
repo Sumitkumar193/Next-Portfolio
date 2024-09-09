@@ -51,14 +51,16 @@ const HeaderNavbar = () => {
 				</nav>
 			</div>
 			<div className="flex items-center space-x-2">
-				<div className="hidden md:flex items-center space-x-2 bg-muted rounded-md px-2">
-					<Search className="h-4 w-3 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-muted-foreground" />
-					<Input
-						type="search"
-						placeholder="Search..."
-						className="bg-transparent border-none focus:outline-none text-sm w-64"
-					/>
-				</div>
+				{ false && (
+					<div className="hidden md:flex items-center space-x-2 bg-muted rounded-md px-2">
+						<Search className="h-4 w-3 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-muted-foreground" />
+						<Input
+							type="search"
+							placeholder="Search..."
+							className="bg-transparent border-none focus:outline-none text-sm w-64"
+						/>
+					</div>
+				) }
 				{isLoggedIn ? (
 					<div className="hidden md:flex">
 						<Profile />

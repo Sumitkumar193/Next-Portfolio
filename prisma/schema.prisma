@@ -13,17 +13,24 @@ datasource db {
 model Role {
   id   String @id @default(uuid())
   name String
-  User User[]
+  users User[]
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  name      String
-  password  String
-  roleId    String
-  role      Role        @relation(fields: [roleId], references: [id])
-  UserToken UserToken[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String
+  password       String
+  roleId         String
+  role           Role            @relation(fields: [roleId], references: [id])
+  userTokens     UserToken[]
+  tasksCreated   Task[]          @relation("CreatedTasks")
+  commentsCreated Comment[]      @relation("CreatedComments")
+  organizations  Organization[]  @relation("OrganizationUsers")
+  boards         Board[]         @relation("BoardUsers")
+  createdOrgs    Organization[]  @relation("CreatedOrganizations")
+  createdBoards  Board[]         @relation("CreatedBoards")
+  createdPosts   Post[]          @relation("CreatedPosts")
 }
 
 model UserToken {
@@ -33,5 +40,102 @@ model UserToken {
   revoked   Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  users     User[]   @relation("OrganizationUsers")
+  boards    Board[]
+  createdBy String
+  creator   User     @relation("CreatedOrganizations", fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Board {
+  id             String       @id @default(uuid())
+  title          String
+  description    String
+  cards          Card[]
+  users          User[]       @relation("BoardUsers")
+  createdBy      String
+  creator        User         @relation("CreatedBoards", fields: [createdBy], references: [id])
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Card {
+  id        String   @id @default(uuid())
+  title     String
+  boardId   String
+  board     Board    @relation(fields: [boardId], references: [id])
+  tasks     Task[]
+  images    Image[]  @relation("CardImages")
+  comments  Comment[] @relation("CardComments")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id        String    @id @default(uuid())
+  title     String
+  content   String
+  images    Image[]   @relation("TaskImages")
+  cardId    String
+  card      Card      @relation(fields: [cardId], references: [id])
+  comments  Comment[] @relation("TaskComments")
+  createdBy String
+  creator   User      @relation("CreatedTasks", fields: [createdBy], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  images    Image[]  @relation("PostImages")
+  comments  Comment[] @relation("PostComments")
+  createdBy String
+  creator   User     @relation("CreatedPosts", fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  taskId    String?
+  task      Task?     @relation("TaskComments", fields: [taskId], references: [id])
+  cardId    String?
+  card      Card?     @relation("CardComments", fields: [cardId], references: [id])
+  postId    String?
+  post      Post?     @relation("PostComments", fields: [postId], references: [id])
+  parentId  String?
+  parent    Comment?  @relation("CommentHierarchy", fields: [parentId], references: [id])
+  children  Comment[] @relation("CommentHierarchy")
+  images    Image[]   @relation("CommentImages")
+  createdBy String
+  creator   User      @relation("CreatedComments", fields: [createdBy], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  taskId    String?
+  task      Task?    @relation("TaskImages", fields: [taskId], references: [id])
+  cardId    String?
+  card      Card?    @relation("CardImages", fields: [cardId], references: [id])
+  commentId String?
+  comment   Comment? @relation("CommentImages", fields: [commentId], references: [id])
+  postId    String?
+  post      Post?    @relation("PostImages", fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
